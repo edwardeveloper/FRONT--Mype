@@ -1,0 +1,246 @@
+<div class="container mx-auto">
+<h1 class="text-center font-bold" >Reporte de Visita</h1>
+
+<div class="relative overflow-x-auto">
+
+  <table class="w-full text-sm text-left rtl:text-right  ">
+
+      <tbody>
+          <tr class="bg-white border-b  ">
+              <th scope="row" class="px-6 py-4 font-medium   whitespace-nowrap  ">
+                  Tipo documento:
+              </th>
+              <td class="px-6 py-4">
+                 Informe de visita
+              </td>
+          </tr>
+          <tr class="bg-white border-b ">
+              <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap ">
+                Presentado a:
+              </th>
+              <td scope="row" class="px-6 py-4 font-medium whitespace-nowrap ">
+                Universidad de Córdoba
+              </td>
+          </tr>
+          <tr class="bg-white border-b ">
+              <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap ">
+                Objetivo de la visita:
+
+              </th>
+              <td class="px-6 py-4">
+                Realizar un diagnóstico para la
+                implementación de la NTC 6001 a la empresa {{ razonSocial }}
+              </td>
+          </tr>
+          <tr class="bg-white border-b ">
+              <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap ">
+                Objetivo del informe:
+              </th>
+              <td class="px-6 py-4">
+                Conocer el estado actual de la empresa
+                frente a los requisitos exigidos por la NTC
+                6001 para su implementación.
+              </td>
+          </tr>
+      </tbody>
+  </table><br>
+<h1 class="text-center font-bold">Desarrollo del informe</h1>
+<h2 class="font-bold">1. Caracterización de la empresa</h2>
+<div class="relative overflow-x-auto">
+  <table class="w-full text-sm text-left rtl:text-right ">
+      <thead class="text-xs text-gray-700 uppercase ">
+          <tr>
+              <th scope="col" class="px-6 py-3">
+                  Empresa
+              </th>
+              <th scope="col" class="px-6 py-3">
+                   {{ razonSocial }}
+              </th>
+          </tr>
+      </thead>
+      <tbody>
+
+          <tr class="bg-white border-b ">
+              <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap ">
+                Descripción de la empresa
+              </th>
+              <td class="px-6 py-4">
+                {{ descripcionEmpresa }}
+              </td>
+          </tr>
+          <tr class="bg-white border-b ">
+              <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap ">
+                Área(s) de intervención
+              </th>
+              <td class="px-6 py-4">
+                ADMINISTRATIVA
+              </td>
+          </tr>
+      </tbody>
+  </table>
+</div>
+<br>
+<h2 class="font-bold">2. Línea Base</h2>
+<p>A continuación, se presentan los resultados obtenidos en la herramienta –
+  diagnóstico en base a la NTC 6001.</p>
+
+  <div class="relative overflow-x-auto">
+    <table class="w-full text-sm text-left rtl:text-right ">
+        <thead class="text-xs text-gray-700 uppercase ">
+            <tr>
+                <th scope="col" class="px-6 py-3">
+                    Capitulo
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Cumple
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    No Cumple
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Cumple Parcialmente
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Observaciones
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let repo of report" class="bg-white border-b ">
+                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap ">
+                  {{ repo[0] }}
+                </th>
+                <td class="px-6 py-4">
+                  {{ repo[3] }}
+                </td>
+                <td class="px-6 py-4">
+                  {{ repo[4] }}
+                </td>
+                <td class="px-6 py-4">
+                  {{ repo[5] }}
+                </td>
+                <td class="px-6 py-4">
+                   {{getReporteSeccion(getSeccion(repo[0]))}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div><br>
+
+<h2 class="font-bold">3. Resultado obtenido</h2>
+<ngx-charts-polar-chart
+  [view]="view"
+  [scheme]="colorScheme"
+  [legend]="legend"
+  [showXAxisLabel]="showXAxisLabel"
+  [showYAxisLabel]="showYAxisLabel"
+  [xAxis]="xAxis"
+  [yAxis]="yAxis"
+  [xAxisLabel]="xAxisLabel"
+  [yAxisLabel]="yAxisLabel"
+  [autoScale]="autoScale"
+  [yAxisMinScale]="yAxisMinScale"
+  [results]="graphData"
+  [rangeFillOpacity]="rangeFillOpacity"
+  (select)="onSelect($event)">
+</ngx-charts-polar-chart>
+
+<p>Una vez realizado el diagnóstico, se puede evidenciar algunos aspectos por
+  mejorar en relación con los diferentes procesos que la NTC-6001 exige para el
+  logro de una mejor competitividad de las Pymes. Respecto a los <span class="font-bold">procesos de
+    dirección</span> se observa que la organización obtuvo un resultado del {{ formatearValorIndividual(report[0][3]/report[0][1]*100) }}%</p>
+
+<p>De manera similar, los resultados de cumplimiento de los <span class="font-bold">procesos de apoyo</span>
+  respecto a la gestión de aspectos tales, como: Talento humano ({{ formatearValorIndividual((reportTempComplete[8][5]/reportTempComplete[8][3])*100) }}%), Recursos
+  físicos ({{ formatearValorIndividual((reportTempComplete[9][5]/reportTempComplete[9][3])*100) }}%), información ({{ formatearValorIndividual((reportTempComplete[10][5]/reportTempComplete[10][3])*100) }}%), compras ({{ formatearValorIndividual((reportTempComplete[11][5]/reportTempComplete[11][3])*100) }}%), financiera ({{ formatearValorIndividual((reportTempComplete[12][5]/reportTempComplete[12][3])*100) }}%) y comercial ({{ formatearValorIndividual((reportTempComplete[13][5]/reportTempComplete[13][3])*100) }}%).</p>
+
+<p>En origen, los procesos de apoyo son indispensables para la realización de los procesos
+  operacionales de la empresa en cuanto a la prestación del servicio y/o
+  elaboración del producto. Para estos <span class="font-bold">procesos misionales u operativos</span>, tales
+  como: Planificación de procesos ({{  formatearValorIndividual((reportEstadisticas[3].cumple/reportEstadisticas[3].countPregunta)*100) }}%), diseño y desarrollo de
+  productos/servicios ({{  formatearValorIndividual((reportEstadisticas[4].cumple/reportEstadisticas[4].countPregunta)*100) }}%), elaboración de productos/servicios ({{  formatearValorIndividual((reportEstadisticas[5].cumple/reportEstadisticas[5].countPregunta)*100) }}%) y control de
+  salida no conforme ({{  formatearValorIndividual((reportEstadisticas[6].cumple/reportEstadisticas[6].countPregunta)*100) }}%)</p>
+
+<p>Como consecuencia, se hace indispensable establecer los <span class="font-bold">procesos de
+  seguimiento y medición</span> donde aspectos como: la satisfacción del cliente ({{  formatearValorIndividual((reportEstadisticas[7].cumple/reportEstadisticas[7].countPregunta)*100) }}%),
+  autoevaluación({{ formatearValorIndividual((reportEstadisticas[8].cumple/reportEstadisticas[8].countPregunta)*100) }}%) y las acciones correctivas ({{  formatearValorIndividual((reportEstadisticas[9].cumple/reportEstadisticas[9].countPregunta)*100) }}%)</p>
+
+  <div class="bg-orange-100 text-gray-800 p-4 rounded-md flex justify-between items-center">
+    <span>Índice del estado actual de la organización - Línea Base</span>
+    <span>{{ formateaValor( report )  }}%</span>
+  </div>
+
+  <br><h2 class="font-bold">5. Recomendaciones</h2>
+
+  <br><h2 class="font-bold">6. Plan de acción</h2>
+  <p>Dado los hallazgos realizados según las valoraciones obtenidas en el
+    diagnóstico ejecutado se establecen una serie de capacitaciones tendientes a
+    fortalecer las mayores falencias detectadas en aspectos, tales como:</p>
+
+  <br><div *ngIf="(report[0][3]/report[0][1])*100<=50">
+    <h2 class="font-bold" >3.1 Procesos de Dirección</h2>
+    <p>Planeación Estratégica</p>
+    <ul>
+      <li>● Comprensión de la organización y su contexto</li>
+      <li>● Comprensión de las necesidades y expectativas de las partes
+        interesadas</li>
+      <li>● Direccionamiento estratégico</li>
+    </ul>
+  </div>
+
+  <div> <!-- // *ngIf="(reportTempComplete[8][5]/reportTempComplete[8][3])*100<=50 || (reportTempComplete[9][5]/reportTempComplete[9][3])*100<=50 || (reportTempComplete[10][5]/reportTempComplete[10][3])*100<=50 || (reportTempComplete[11][5]/reportTempComplete[11][3])*100<=50 || (reportTempComplete[12][5]/reportTempComplete[12][3])*100<=50 || (reportTempComplete[13][5]/reportTempComplete[13][3])*100<=50"> -->
+    <br><h2 class="font-bold"> 3.2 Procesos de soporte</h2>
+    <p>Procesos de apoyo</p>
+    <ul>
+      <li *ngIf="(reportTempComplete[8][5]/reportTempComplete[8][3])*100<=50">● Gestión del Talento humano</li>
+      <li *ngIf="(reportTempComplete[9][5]/reportTempComplete[9][3])*100<=50">● Gestión de Recursos físicos</li>
+      <li *ngIf="(reportTempComplete[10][5]/reportTempComplete[10][3])*100<=50">● Gestión de la Información</li>
+      <li *ngIf="(reportTempComplete[11][5]/reportTempComplete[11][3])*100<=50">● Gestión de Compras</li>
+      <li *ngIf="(reportTempComplete[12][5]/reportTempComplete[12][3])*100<=50">● Gestión Financiera</li>
+      <li *ngIf="(reportTempComplete[13][5]/reportTempComplete[13][3])*100<=50">● Gestión Comercial</li>
+    </ul>
+  </div>
+  <div>
+  <!-- <div *ngIf="(reportEstadisticas[3].cumple/reportEstadisticas[3].countPregunta)*100 <= 50 || (reportEstadisticas[4].cumple/reportEstadisticas[4].countPregunta)*100 <= 50 || (reportEstadisticas[5].cumple/reportEstadisticas[5].countPregunta)*100 <= 50 || (reportEstadisticas[6].cumple/reportEstadisticas[6].countPregunta)*100 <= 50"> -->
+    <br><h2 class="font-bold">3.3 Procesos Misionales</h2>
+    <p>Procesos de Operación</p>
+    <ul>
+      <li *ngIf="(reportEstadisticas[3].cumple/reportEstadisticas[3].countPregunta)*100 <= 50">● Planificación de los Procesos</li>
+      <li *ngIf="(reportEstadisticas[4].cumple/reportEstadisticas[4].countPregunta)*100 <= 50">● Diseño y desarrollo de productos/servicios</li>
+      <li *ngIf="(reportEstadisticas[5].cumple/reportEstadisticas[5].countPregunta)*100 <= 50">● Elaboración de productos /servicios</li>
+      <li *ngIf="(reportEstadisticas[6].cumple/reportEstadisticas[6].countPregunta)*100 <= 50">● Control de salida No conforme</li>
+    </ul>
+  </div>
+<div>
+  <!-- <div ngIf="(reportEstadisticas[7].cumple/reportEstadisticas[7].countPregunta)*100 <= 50 || (reportEstadisticas[8].cumple/reportEstadisticas[8].countPregunta)*100 <= 50 || (reportEstadisticas[8].cumple/reportEstadisticas[8].countPregunta)*100 <= 50"> -->
+    <br><h2 class="font-bold">3.4 Procesos de seguimiento y Medición</h2>
+    <p>Procesos de seguimiento y mejora</p>
+    <ul>
+      <li *ngIf="(reportEstadisticas[7].cumple/reportEstadisticas[7].countPregunta)*100 <= 50">● Satisfacción del cliente</li>
+      <li *ngIf="(reportEstadisticas[8].cumple/reportEstadisticas[8].countPregunta)*100 <= 50">● Autoevaluación</li>
+      <li *ngIf="(reportEstadisticas[8].cumple/reportEstadisticas[8].countPregunta)*100 <= 50">● No conformidad y Acción Correctiva</li>
+    </ul>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <h2 class="font-bold">4. Conclusiones</h2>
+<h2 class="font-bold">5. Recomendaciones</h2>
+<h2 class="font-bold">6. Plan de acción</h2>
+<p>Dado los hallazgos realizados según las valoraciones obtenidas en el
+  diagnóstico ejecutado se establecen una serie de capacitaciones tendientes a
+  fortalecer las mayores falencias detectadas en aspectos, tales como:</p>
+</div> -->

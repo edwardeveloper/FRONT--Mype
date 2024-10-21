@@ -1,0 +1,15 @@
+export interface MypeInterface{
+  idmype: number,
+  mcorreo: string,
+  mdescripcionEmpresa: string,
+  mdireccion: string,
+  mnit: number,
+  mobjetoSocial: string,
+  mrazonSocial: string,
+  mrepresentanteLegal: string,
+  mrut: string,
+  msector: string,
+  mtelefono: number,
+  mtipoEmpresa: string,
+  user_iduser: number,
+}
